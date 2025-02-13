@@ -10,16 +10,29 @@ import { Injectable } from '@angular/core';
 export class CuestionarioService {
   // Array bat gordetzeko json-ean dauden galdera guztiak. Gogoratu array-a abiarazten arazoak ekiditzeko
   // Gehitu beharrezkoak diren konponenteak eta zerbitzuak
-  constructor() {
-    //Datuak kargatu
+  private galderak: IPregunta[] | undefined;
+  public getGalderak():IPregunta[]|undefined{return this.galderak};
+  public setGalderak(galderak: IPregunta[]){this.galderak=galderak};
+
+  constructor(private fitxategiaIrakurri:HttpClient) {
+    this.getGalderakJson(fitxategiaIrakurri)
   }
 
   // IPregunta array-a bueltatuko duen metodoa, hau da, galdetegiko galdera guztiak array batean
+  ngOnInit(){
+    
+  }
 
-
+  
   // Fitxategia irakurtzeko metodoa
   // Gogoratu asinkronoa dela.
-
+  getGalderakJson(bezero:HttpClient){
+    let galderakFitx:Observable<IPregunta[]>
+    galderakFitx =  bezero.get<IPregunta[]>("/assets/datos/datos.json");
+    galderakFitx.subscribe(datuak=>{
+      this.galderak!.push(...datuak);
+    })
+  }
 
   // Fitxategitik irakurtzen ditu datuak eta arrayan gordetzen ditu
 
